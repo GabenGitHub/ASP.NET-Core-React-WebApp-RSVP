@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using RSVP_Web_app.Models;
+using RSVP_Web_app.Services;
 
 namespace RSVP_Web_app
 {
@@ -21,6 +24,14 @@ namespace RSVP_Web_app
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<GuestsDatabaseSettings>(
+                Configuration.GetSection(nameof(GuestsDatabaseSettings)));
+
+            services.AddSingleton<IGuestsDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<GuestsDatabaseSettings>>().Value);
+
+            services.AddSingleton<GuestService>();
+
             services.AddControllersWithViews();
 
             // In production, the React files will be served from this directory
