@@ -10,7 +10,6 @@ namespace RSVP_Web_app.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [BsonElement("name")]
         public string name { get; set; }
 
         public string participate { get; set; }
@@ -23,7 +22,7 @@ namespace RSVP_Web_app.Models
         public DateTime created { get; set; }
 
         [BsonElement("__v")]
-        public Int32 mongooseVersion { get; set; }
+        public Int32 mongooseVersionKey { get; set; }
 
         [BsonExtraElements]
         public BsonDocument CatchExtraElements { get; set; }
