@@ -1,0 +1,10 @@
+.footer {
+    text-align: center;
+    padding-top: 20px;
+    background: rgb(36, 36, 36);
+    color: white;
+}
+.copyright {
+    letter-spacing: 0.3rem;
+    text-transform: uppercase;
+}

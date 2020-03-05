@@ -1,0 +1,29 @@
+.header {
+    background: #007261;
+}
+
+.navbar-container {
+    height: 100%;
+    padding: 0 13%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand-logo {
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: 700;
+    color: white;
+}
+
+.menu-item {
+    display: inline;
+    margin: 0 15px;
+    font-size: 1.5rem;
+}
+
+.menu-item a {
+    color: white;
+}

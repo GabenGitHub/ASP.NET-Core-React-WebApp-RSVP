@@ -1,0 +1,117 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+a {
+  text-decoration: none;
+}
+
+.grid-container {
+  display: grid;
+  height: 100vh;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 60px 1fr 60px;
+  grid-template-areas:
+    'navbar navbar navbar'
+    'main main main'
+    'footer footer footer';
+  gap: 10px;
+}
+
+/* Navbar */
+.navbar {
+  grid-area: navbar;
+}
+
+/* Main page */
+.main {
+  margin: 0 10px;
+  grid-area: main;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  grid-template-areas:
+  'about'
+  'guests'
+  'user-form'
+}
+
+@media screen and (min-width: 550px) {
+  .main {
+    grid-template-columns: 4fr 2fr;
+    grid-template-rows: 1fr 2fr;
+    grid-template-areas:
+    'about guests'
+    'user-form guests'
+  }
+}
+
+.admin {
+    margin: 0 10px;
+    grid-area: main;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    grid-template-areas:
+    'about'
+    'guests'
+    'admin-form-add'
+    'admin-form-remove'
+  }
+
+@media screen and (min-width: 550px) {
+  .admin {
+    grid-template-columns: 4fr 2fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-areas:
+    'about guests'
+    'admin-form-add guests'
+    'admin-form-remove guests'
+  }
+}
+
+.about {
+  border: 1px solid grey;
+  padding: 2rem;
+}
+.user-form {
+  grid-area: user-form;
+  border: 1px solid grey;
+  padding: 2rem;
+}
+.admin-form-add {
+  grid-area: admin-form-add;
+  border: 1px solid grey;
+  padding: 2rem;
+}
+.admin-form-remove {
+  grid-area: admin-form-remove;
+  border: 1px solid grey;
+  padding: 2rem;
+}
+.guests {
+  grid-area: guests;
+  border: 1px solid grey;
+  padding: 1.5rem;
+  min-width: 250px;
+}
+
+/* Footer */
+.footer {
+  grid-area: footer;
+}
