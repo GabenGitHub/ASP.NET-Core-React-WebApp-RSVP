@@ -4,7 +4,7 @@ export const fetchGuestList = () => async dispatch => {
     try {
         const respond = await fetch('/api/listGuests', {
             method: 'get',
-            headers: { 'Content-Type': 'application,json' },
+            headers: { 'Content-Type': 'application/json' },
         });
         const guests = await respond.json();
         dispatch({

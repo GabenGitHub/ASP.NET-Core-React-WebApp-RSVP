@@ -19,8 +19,15 @@ namespace RSVP_Web_app.Services
         public List<Guest> Get() =>
             _guests.Find(guest => true).ToList();
 
-        public Guest Get(string id) =>
-            _guests.Find<Guest>(guest => guest.Id == id).FirstOrDefault();
+        public Guest GetByName(string name)
+        {
+            return _guests.Find<Guest>(guest => guest.name.ToLower() == name.ToLower()).FirstOrDefault();
+        }
+
+        public Guest GetByGuestIn(string id)
+        {
+            return _guests.Find<Guest>(guest => guest._id == id).FirstOrDefault();
+        }
 
         public Guest Create(Guest guest)
         {
@@ -28,13 +35,15 @@ namespace RSVP_Web_app.Services
             return guest;
         }
 
-        public void Update(string id, Guest guestIn) =>
-            _guests.ReplaceOne(guest => guest.Id == id, guestIn);
+        public void Update(string id, Guest guestIn)
+        {
+            _guests.ReplaceOne(guest => guest._id == id, guestIn);
+        }
 
         public void Remove(Guest guestIn) =>
-            _guests.DeleteOne(guest => guest.Id == guestIn.Id);
+            _guests.DeleteOne(guest => guest._id == guestIn._id);
 
         public void Remove(string id) =>
-            _guests.DeleteOne(guest => guest.Id == id);
+            _guests.DeleteOne(guest => guest._id == id);
     }
 }
