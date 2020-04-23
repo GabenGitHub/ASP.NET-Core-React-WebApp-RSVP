@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MongoDB.Driver;
 using RSVP_Web_app.Models;
 
@@ -16,34 +17,36 @@ namespace RSVP_Web_app.Services
             _guests = database.GetCollection<Guest>(settings.GuestsCollectionName);
         }
 
-        public List<Guest> Get() =>
-            _guests.Find(guest => true).ToList();
-
-        public Guest GetByName(string name)
+        public async Task<List<Guest>> Get()
         {
-            return _guests.Find<Guest>(guest => guest.name.ToLower() == name.ToLower()).FirstOrDefault();
+            var gettingGuests = await _guests.FindAsync(guest => true);
+            return gettingGuests.ToList();
         }
 
-        public Guest GetByGuestIn(string id)
+        public async Task<Guest> GetByName(string name)
         {
-            return _guests.Find<Guest>(guest => guest._id == id).FirstOrDefault();
+            var foundGuestByName = await _guests.FindAsync<Guest>(guest => guest.name.ToLower() == name.ToLower());
+            var foundGuestFirstOrDefault = await foundGuestByName.FirstOrDefaultAsync();
+            return foundGuestFirstOrDefault;
         }
 
-        public Guest Create(Guest guest)
+        public async Task<Guest> GetByGuestIn(string id)
         {
-            _guests.InsertOne(guest);
+            var foundGuestByName = await _guests.FindAsync<Guest>(guest => guest._id == id);
+            var foundGuestFirstOrDefault = await foundGuestByName.FirstOrDefaultAsync();
+            return foundGuestFirstOrDefault;
+        }
+
+        public async Task<Guest> Create(Guest guest)
+        {
+            await _guests.InsertOneAsync(guest);
             return guest;
         }
 
-        public void Update(string id, Guest guestIn)
-        {
-            _guests.ReplaceOne(guest => guest._id == id, guestIn);
-        }
+        public async Task Update(string id, Guest guestIn) =>
+            await _guests.ReplaceOneAsync(guest => guest._id == id, guestIn);
 
-        public void Remove(Guest guestIn) =>
-            _guests.DeleteOne(guest => guest._id == guestIn._id);
-
-        public void Remove(string id) =>
-            _guests.DeleteOne(guest => guest._id == id);
+        public async Task Remove(string id) =>
+            await _guests.DeleteOneAsync(guest => guest._id == id);
     }
 }

@@ -1,11 +1,8 @@
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using RSVP_Web_app.Services;
 using RSVP_Web_app.Models;
 using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace RSVP_Web_app.Controllers
 {
@@ -21,7 +18,7 @@ namespace RSVP_Web_app.Controllers
         }
 
         [HttpPost("addGuest")]
-        public ActionResult<Guest> Create([FromBody]Guest guest)
+        public async Task<ActionResult<Guest>> Create([FromBody]Guest guest)
         {
             if(guest == null)
             {
@@ -35,22 +32,22 @@ namespace RSVP_Web_app.Controllers
             guest.plusOneName = "";
             guest.created = DateTime.Now;
 
-            _guestService.Create(guest);
+            await _guestService.Create(guest);
 
             return Ok(guest);
         }
 
         [HttpDelete("removeGuest")]
-        public IActionResult Delete([FromBody]Guest guestIn)
+        public async Task<IActionResult> Delete([FromBody]Guest guestIn)
         {
-            var guest = _guestService.GetByName(guestIn.name);
+            var guest = await _guestService.GetByName(guestIn.name);
 
             if (guest == null)
             {
-                return NotFound();
+                return NotFound("Not found");
             }
 
-            _guestService.Remove(guest._id);
+            await _guestService.Remove(guest._id);
 
             return Ok(guest);
         }

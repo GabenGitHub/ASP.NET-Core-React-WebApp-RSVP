@@ -22,16 +22,16 @@ namespace RSVP_Web_app.Controllers
 
         [HttpGet]
         [Route("listGuests")]
-        public ActionResult<List<Guest>> Get()
+        public async Task<ActionResult<List<Guest>>> Get()
         {
-            return _guestService.Get();
+            return await _guestService.Get();
         }
 
         [HttpPost]
         [Route("checkGuest")]
-        public ActionResult<Guest> CheckGuest([FromBody]Guest guestIn)
+        public async Task<ActionResult<Guest>> CheckGuest([FromBody]Guest guestIn)
         {
-            var guest = _guestService.GetByName(guestIn.name);
+            var guest = await _guestService.GetByName(guestIn.name);
 
             if(guest == null)
             {
@@ -42,9 +42,9 @@ namespace RSVP_Web_app.Controllers
         }
 
         [HttpPut("editGuest")]
-        public IActionResult Update([FromBody]Guest guestIn)
+        public async Task<IActionResult> Update([FromBody]Guest guestIn)
         {
-            var guest = _guestService.GetByGuestIn(guestIn._id);
+            var guest = await _guestService.GetByGuestIn(guestIn._id);
 
             // TODO REFACTOR
             guest.participate = guestIn.participate;
@@ -56,9 +56,9 @@ namespace RSVP_Web_app.Controllers
                 return NotFound();
             }
 
-            _guestService.Update(guestIn._id, guest);
+            await _guestService.Update(guestIn._id, guest);
 
-            var guestList = _guestService.Get();
+            var guestList = await _guestService.Get();
 
             return Ok(guestList);
         }
