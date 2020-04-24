@@ -12,7 +12,7 @@ class FormAdminRemove extends React.Component {
     checkName = async (event) => {
         const { name, value } = event.target;
         this.setState({ [name]: value });
-        const respond = await fetch('/api/checkGuest', {
+        const respond = await fetch('/api/guests/check', {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -28,7 +28,10 @@ class FormAdminRemove extends React.Component {
                 isOnTheList: true
             });
         } else {
-            this.setState({ message: await respond.text() })
+            this.setState({ 
+                isOnTheList: false,
+                message: await respond.text() 
+            })
         }
     };
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace RSVP_Web_app.Controllers
 {
     [ApiController]
-    [Route("api")]
+    [Route("api/guests")]
     public class AdminController : ControllerBase
     {
         private readonly GuestService _guestService;
@@ -17,39 +17,58 @@ namespace RSVP_Web_app.Controllers
             _guestService = guestService;
         }
 
-        [HttpPost("addGuest")]
+        [HttpPost("add")]
         public async Task<ActionResult<Guest>> Create([FromBody]Guest guest)
         {
-            if(guest == null)
+            try
             {
-                return BadRequest();
+                if(guest == null || string.IsNullOrWhiteSpace(guest.name))
+                {
+                    return BadRequest("Cannot be empty or white space");
+                }
+
+                // avoiding duplicates
+                var checkGuestIfExist = await _guestService.GetByName(guest.name);
+                if(checkGuestIfExist != null)
+                {
+                    return BadRequest("Guest already exist.");
+                }
+
+                // Empty strings come as null 
+                guest.participate = "";
+                guest.plusOneName = "";
+                guest.created = DateTime.Now;
+
+                await _guestService.Create(guest);
+
+                return Ok(guest);
             }
-
-            // TODO: check name to avoid duplicates (for deletion)
-
-            // Empty strings come as null 
-            guest.participate = "";
-            guest.plusOneName = "";
-            guest.created = DateTime.Now;
-
-            await _guestService.Create(guest);
-
-            return Ok(guest);
+            catch (System.Exception)
+            {
+                return StatusCode(500);
+            }
         }
 
-        [HttpDelete("removeGuest")]
+        [HttpDelete("remove")]
         public async Task<IActionResult> Delete([FromBody]Guest guestIn)
         {
-            var guest = await _guestService.GetByName(guestIn.name);
-
-            if (guest == null)
+            try
             {
-                return NotFound("Not found");
+                var guest = await _guestService.GetByName(guestIn.name);
+
+                if (guest == null)
+                {
+                    return NotFound("Not found");
+                }
+
+                await _guestService.Remove(guest._id);
+
+                return Ok(guest);
             }
-
-            await _guestService.Remove(guest._id);
-
-            return Ok(guest);
+            catch (System.Exception)
+            {
+                return StatusCode(500);
+            }
         }
     }
 }

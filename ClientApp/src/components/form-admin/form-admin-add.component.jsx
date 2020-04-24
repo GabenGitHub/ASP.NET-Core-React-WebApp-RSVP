@@ -7,23 +7,6 @@ class FormAdminAdd extends React.Component {
         nameAdd: '',
     }
 
-    checkName = async (event) => {
-        const { name, value } = event.target;
-        this.setState({ [name]: value });
-        const respond = await fetch('/api/checkGuest', {
-            method: 'post',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                "name": event.target.value,
-            })
-        });
-        if (await respond.ok) {
-            const foundGuest = await respond.json()
-            const { name } = foundGuest;
-            this.setState({ nameRemove: name });
-        }
-    };
-
     handleChange = (event) => {
         const { name, value } = event.target;
         this.setState({ [name]: value });

@@ -2,7 +2,7 @@ import { FETCH_GUESTS, SUBMIT_RESPONSE, ADD_GUEST, REMOVE_GUEST } from './types'
 
 export const fetchGuestList = () => async dispatch => {
     try {
-        const respond = await fetch('/api/listGuests', {
+        const respond = await fetch('/api/guests', {
             method: 'get',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -18,7 +18,7 @@ export const fetchGuestList = () => async dispatch => {
 
 export const submitResponse = (guestData) => async dispatch => {
     try {
-        const respond = await fetch('/api/editGuest', {
+        const respond = await fetch('/api/guests/edit', {
             method: 'put',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(guestData)
@@ -39,7 +39,7 @@ export const submitResponse = (guestData) => async dispatch => {
 
 export const addGuest = (guestData) => async dispatch => {
     try {
-        const respond = await fetch('/api/addGuest', {
+        const respond = await fetch('/api/guests/add', {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(guestData)
@@ -60,7 +60,7 @@ export const addGuest = (guestData) => async dispatch => {
 
 export const removeGuest = (guestData) => async dispatch => {
     try {
-        const respond = await fetch('/api/removeGuest', {
+        const respond = await fetch('/api/guests/remove', {
             method: 'delete',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(guestData)

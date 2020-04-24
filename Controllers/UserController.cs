@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace RSVP_Web_app.Controllers
 {
     [ApiController]
-    [Route("api")]
+    [Route("api/guests")]
     public class UserController : ControllerBase
     {
         private readonly GuestService _guestService;
@@ -21,46 +21,72 @@ namespace RSVP_Web_app.Controllers
         }
 
         [HttpGet]
-        [Route("listGuests")]
         public async Task<ActionResult<List<Guest>>> Get()
         {
-            return await _guestService.Get();
+            try
+            {
+                return await _guestService.Get();
+            }
+            catch (System.Exception)
+            {
+                return StatusCode(500);
+            }
         }
 
         [HttpPost]
-        [Route("checkGuest")]
+        [Route("check")]
         public async Task<ActionResult<Guest>> CheckGuest([FromBody]Guest guestIn)
         {
-            var guest = await _guestService.GetByName(guestIn.name);
-
-            if(guest == null)
+            try
             {
-                return NotFound("Not found");
-            }
+                var guest = await _guestService.GetByName(guestIn.name);
 
-            return Ok(guest);
+                 if(guest == null)
+                {
+                    return NotFound("Not found");
+                }
+
+                return Ok(guest);
+            }
+            catch (System.Exception)
+            {
+                return StatusCode(500);
+            } 
         }
 
-        [HttpPut("editGuest")]
+        [HttpPut("edit")]
         public async Task<IActionResult> Update([FromBody]Guest guestIn)
         {
-            var guest = await _guestService.GetByGuestIn(guestIn._id);
-
-            // TODO REFACTOR
-            guest.participate = guestIn.participate;
-            guest.plusOne = guestIn.plusOne;
-            guest.plusOneName = guestIn.plusOneName;
-
-            if (guest == null)
+            try
             {
-                return NotFound();
+                var guest = await _guestService.GetByGuestIn(guestIn._id);
+
+                if (guest == null)
+                {
+                    return NotFound("Guest not found");
+                }
+
+                guest.participate = guestIn.participate;
+                guest.plusOne = guestIn.plusOne;
+                guest.plusOneName = guestIn.plusOneName;
+
+                // checking plus one
+                if (guestIn.participate == "no" || guestIn.plusOne == false)
+                {
+                    guest.plusOne = false;
+                    guest.plusOneName = "";
+                }
+
+                await _guestService.Update(guestIn._id, guest);
+
+                var guestList = await _guestService.Get();
+
+                return Ok(guestList);
             }
-
-            await _guestService.Update(guestIn._id, guest);
-
-            var guestList = await _guestService.Get();
-
-            return Ok(guestList);
+            catch (System.Exception)
+            {
+                return StatusCode(500);
+            }
         }
     }
 }

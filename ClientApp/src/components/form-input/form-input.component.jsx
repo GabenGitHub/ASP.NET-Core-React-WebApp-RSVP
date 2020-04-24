@@ -23,7 +23,7 @@ class FormInput extends React.Component {
     checkName = async (event) => {
         const { name, value } = event.target;
         this.setState({ [name]: value });
-        const respond = await fetch('/api/checkGuest', {
+        const respond = await fetch('/api/guests/check', {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -43,7 +43,12 @@ class FormInput extends React.Component {
                 message: 'Found'
             });
         } else {
+            // clear the state, except the name
             this.setState({ 
+                _id: '',
+                participate: '',
+                plusOne: false,
+                plusOneName: '',
                 isOnTheList: false,
                 message: await respond.text() 
             });
