@@ -24,7 +24,7 @@ namespace RSVP_Web_app.Controllers
             {
                 if(guest == null || string.IsNullOrWhiteSpace(guest.name))
                 {
-                    return BadRequest("Cannot be empty or white space");
+                    return BadRequest("Cannot be empty or white space.");
                 }
 
                 // avoiding duplicates
@@ -34,6 +34,7 @@ namespace RSVP_Web_app.Controllers
                     return BadRequest("Guest already exist.");
                 }
 
+                guest.name = guest.name.Trim();
                 // Empty strings come as null 
                 guest.participate = "";
                 guest.plusOneName = "";
